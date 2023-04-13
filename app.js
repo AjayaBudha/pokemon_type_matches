@@ -31,7 +31,7 @@ app.get("/types/:name", (req, res) => {
 });
 
 //add new type
-app.post("fruits/", (req, res) => {
+app.post("fruits/:name", (req, res) => {
   const reqPkmType = pokemon.map((pkmTypes) => pkmTypes.name);
   let maxId = Math.max(...reqPkmType);
   const pkmType = pokemon.find((pkmType) => pkmType.name === req.body.name);
