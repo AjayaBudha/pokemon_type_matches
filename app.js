@@ -24,15 +24,14 @@ app.get("/types", (req, res) => {
 // });
 
 //find specific type
-app.get("/types/:id", (req, res) => {
-  const pkmID = req.params.id;
-  const id = "id";
-  console.log(pokemon["id"]);
-  const findPKM = pokemon.find((findPKM) => findPKM.id === pkmID);
-
-  if (findPKM === undefined) {
+app.get("/types/:name", (req, res) => {
+  const pkmName = req.params.name.toLowerCase();
+  const pkmType = pokemon.find(
+    (pkmType) => pkmType.name.toLowerCase() === pkmName
+  );
+  if (pkmType === undefined) {
     res.status(404).send({ error: `pokemon id: ${pkmID} not found` });
   }
-  res.send(findPKM);
+  res.send(pkmType);
 });
 module.exports = app;
