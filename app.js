@@ -18,20 +18,33 @@ app.get("/types", (req, res) => {
   res.send(pokemon);
 });
 
-//just to display the id
-// app.get("/types/:id", (req, res) => {
-//   res.send(req.params.id);
-// });
-
 //find specific type
 app.get("/types/:name", (req, res) => {
-  const pkmName = req.params.name.toLowerCase();
+  const reqPkmType = req.params.name.toLowerCase();
   const pkmType = pokemon.find(
-    (pkmType) => pkmType.name.toLowerCase() === pkmName
+    (pkmType) => pkmType.name.toLowerCase() === reqPkmType
   );
   if (pkmType === undefined) {
-    res.status(404).send({ error: `pokemon id: ${pkmID} not found` });
+    res.status(404).send({ error: `pokemon type: ${reqPkmType} not found` });
   }
   res.send(pkmType);
 });
+
+//add new type
+app.post("fruits/", (req, res) => {
+  const reqPkmType = pokemon.map((pkmTypes) => pkmTypes.name);
+  let maxId = Math.max(...reqPkmType);
+  const pkmType = pokemon.find((pkmType) => pkmType.name === req.body.name);
+
+  if (pkmType !== undefined) {
+    res.status(409).send({ error: "pokemon type alreay exists" });
+  } else {
+    maxId += 1;
+    const newType = req.body;
+    newType.id = maxId;
+    pokemon.push(newType);
+    res.status(201).send(newType);
+  }
+});
+
 module.exports = app;
