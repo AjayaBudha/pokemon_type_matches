@@ -54,14 +54,21 @@ app.patch("fruits/:name", (req, res) => {
     (pkmType) => pkmType.name.toLowerCase() === req.body.name.toLowerCase()
   );
 
-  if (pkmType !== undefined) {
+  if (pkmType === undefined) {
     return res.status(404).send("Pokemon type does not exist");
   } else {
-    const updatedPkmType = {
-      ...req.body,
-      name: capitalise(req.body.name),
-      id: pkmType.id,
-    };
+    try {
+      const updatedPkmType = {
+        ...req.body,
+        name: capitalise(req.body.name),
+        id: pkmType.id,
+      };
+      const idx = pokemon.findIndex((p) => p.id === pkmType.id);
+      pokemon[idx] = updatedPkmType;
+      res.send(updatedPkmType);
+    } catch (error) {
+      res.send(404).send(error.message);
+    }
   }
 });
 
@@ -70,14 +77,11 @@ app.delete("fruits/:name", (req, res) => {
   const reqPkmType = pokemon.map((pkmTypes) => pkmTypes.name);
   const pkmType = pokemon.find((pkmType) => pkmType.name === req.body.name);
 
-  if (pkmType !== undefined) {
+  if (pkmType === -1) {
     res.status(401).send({ error: "pokemon type does not exists" });
   } else {
-    const newType = req.body;
-    newType.id = maxId;
-    pokemon.pop(newType);
-    console.log("done");
-    res.status(201).send(newType);
+    pokemon.splice(pkmType, -1);
+    res.status(204).send();
   }
 });
 
