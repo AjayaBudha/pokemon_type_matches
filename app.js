@@ -26,9 +26,10 @@ app.get("/types", (req, res) => {
 //find specific type
 app.get("/types/:id", (req, res) => {
   const pkmID = req.params.id;
-  console.log(pkmID);
+  const id = "id";
+  console.log(pokemon["id"]);
   const findPKM = pokemon.find((findPKM) => findPKM.id === pkmID);
-  console.log(findPKM);
+
   if (findPKM === undefined) {
     res.status(404).send({ error: `pokemon id: ${pkmID} not found` });
   }
